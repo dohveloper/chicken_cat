@@ -12,7 +12,9 @@
   <body oncontextmenu="return false;"onselectstart="return false" >
     <div class="catContainer" />
       <div class="bg-line"></div>
+      
       <img class="cat__body" alt="cat_body" src="./img/cat.png" />
+      <img class="cat__mouth--meow none" alt="meow_mouth" src="./img/meow_mouth.png" />
       <!--Left side-->
       <img class="cat__hand-left--up" alt="handup_left" src="./img/left_up.png" />
       <img class="cat__hand-left--down none" alt="handdown_left" src="./img/left_down.png" />
@@ -32,6 +34,7 @@
       //flag for play sound only once per press
       let isLeftFired = false;
       let isRightFired = false;
+      let isMeowFired=false;
        document.onmousedown = mouseDown;
       document.onmouseup = mouseUp;
       document.onkeydown = keyDown;
@@ -72,11 +75,13 @@
       //Key Event
       function keyDown() {
         switch (event.keyCode) {
+          //Left Key
           case 37:
             handDown('left');
             playSound('leftDown');
             isLeftFired = true;
             break;
+          //Up,Down Key
           case 38:
           case 40:
             handDown('left');
@@ -86,21 +91,30 @@
             isLeftFired = true;
             isRightFired = true;
             break;
+          //Right Key
           case 39:
             handDown('right');
             playSound('rightDown');
             isRightFired = true;
+            break;
+          //Space Key
+          case 32:
+            doMeowMouth();
+            playSound('meow');
+            isMeowFired = true;
             break;
         }
       }
       function keyUp() {
         console.log(event.keyCode);
         switch (event.keyCode) {
+          //Left Key
           case 37:
             handUp('left');
             playSound('leftUp');
             isLeftFired = false;
             break;
+          //Left,Right Key
           case 38:
           case 40:
             handUp('left');
@@ -110,14 +124,19 @@
             isLeftFired = false;
             isRightFired = false;
             break;
+          //Right Key
           case 39:
             handUp('right');
             playSound('rightUp');
             isRightFired = false;
             break;
+          //Space Key
+          case 32:
+            endMeowMouth();
+            isMeowFired = false;
+            break;
         }
       }
-      
       //Sound
       function playSound(sound) {
         //only play sound for once(with help of isLeftFired&&isRightFired)
@@ -138,9 +157,22 @@
           audio = new Audio('./sound/sound2-2.mp3');
           audio.play();
         }
+         if (sound == 'meow' && isMeowFired===false) {
+          audio = new Audio('./sound/meow.mp3');
+          audio.play();
+        }
         
       }
       
+      function doMeowMouth(){
+        let mouth = document.getElementsByClassName(`cat__mouth--meow`)[0];
+        mouth.classList.remove('none');
+      }
+      function endMeowMouth(){
+        let mouth = document.getElementsByClassName(`cat__mouth--meow`)[0];
+        mouth.className += ' none';
+      }
+
       //Hand Motion
       function handDown(side) {
         let upHand = document.getElementsByClassName(`cat__hand-${side}--up`)[0];
