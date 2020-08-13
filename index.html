@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chicken Cat</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      function myFunction() {
+        document.getElementById('demo').innerHTML = 'Paragraph changed.';
+      }
+    </script>
+  </head>
+  <body oncontextmenu="return false;"onselectstart="return false" >
+    <div class="catContainer" />
+      <div class="bg-line"></div>
+      <img class="cat__body" alt="cat_body" src="./img/cat.png" />
+      <!--Left side-->
+      <img class="cat__hand-left--up" alt="handup_left" src="./img/left_up.png" />
+      <img class="cat__hand-left--down none" alt="handdown_left" src="./img/left_down.png" />
+
+      <img class="chicken-left--up" alt="chicken_left" src="./img/chicken_before.png" />
+      <img class="chicken-left--down none" alt="chicken_left" src="./img/chicken_after.png" />
+
+      <!--Right side-->
+      <img class="cat__hand-right--up" alt="handup_right" src="./img/right_up.png" />
+      <img class="cat__hand-right--down none" alt="handdown_right" src="./img/right_down.png" />
+
+      <img class="chicken-right--up" alt="chicken_right" src="./img/chicken_before.png" />
+      <img class="chicken-right--down none" alt="chicken_right" src="./img/chicken_after.png" />
+    </div>
+
+    <script>
+      //flag for play sound only once per press
+      let isLeftFired = false;
+      let isRightFired = false;
+       document.onmousedown = mouseDown;
+      document.onmouseup = mouseUp;
+      document.onkeydown = keyDown;
+      document.onkeyup = keyUp;
+
+      //Mouse Event 
+      function mouseDown(event) {
+        //Check whether it is a left-click or a right-click.
+        switch (event.which) {
+          case 1:
+            handDown('left');
+            break;
+          case 2:
+            handDown('left');
+            handDown('right');
+            break;
+          case 3:
+            handDown('right');
+            break;
+        }
+      }
+      function mouseUp(event) {
+        //Check whether it is a left-click or a right-click.
+        switch (event.which) {
+          case 1:
+            handUp('left');
+            break;
+          case 2:
+            handUp('left');
+            handUp('right');
+            break;
+          case 3:
+            handUp('right');
+            break;
+        }
+      }
+      
+      //Key Event
+      function keyDown() {
+        console.log(event.keyCode);
+        switch (event.keyCode) {
+          case 37:
+            handDown('left');
+            playSound('leftDown');
+            isLeftFired = true;
+            break;
+          case 38:
+          case 40:
+            handDown('left');
+            handDown('right');
+            playSound('leftDown');
+            playSound('rightDown');
+            break;
+          case 39:
+            handDown('right');
+            playSound('rightDown');
+            break;
+        }
+      }
+      function keyUp() {
+        console.log(event.keyCode);
+        switch (event.keyCode) {
+          case 37:
+            handUp('left');
+            playSound('leftUp');
+            isLeftFired = true;
+            break;
+          case 38:
+          case 40:
+            handUp('left');
+            handUp('right');
+            playSound('leftUp');
+            playSound('rightUp');
+            break;
+          case 39:
+            handUp('right');
+            playSound('rightUp');
+            break;
+        }
+      }
+      
+      //Sound
+      function playSound(sound) {
+        let audio;
+        if (sound == 'leftDown') {
+          audio = new Audio('./sound/sound1-1.mp3');
+        }
+        if (sound == 'leftUp') {
+          audio = new Audio('./sound/sound1-2.mp3');
+        }
+        if (sound == 'rightDown') {
+          audio = new Audio('./sound/sound2-1.mp3');
+        }
+        if (sound == 'rightUp') {
+          audio = new Audio('./sound/sound2-2.mp3');
+        }
+        audio.play();
+      }
+      
+      //Hand Motion
+      function handDown(side) {
+        let upHand = document.getElementsByClassName(`cat__hand-${side}--up`)[0];
+        let upChicken = document.getElementsByClassName(`chicken-${side}--up`)[0];
+        let downHand = document.getElementsByClassName(`cat__hand-${side}--down`)[0];
+        let downChicken = document.getElementsByClassName(`chicken-${side}--down`)[0];
+
+        //Remove upHand & upChicken by adding "none" class
+        upHand.className += ' none';
+        upChicken.className += ' none';
+
+        //Make appear downHand & downChicken by removing "none" class
+        downHand.classList.remove('none');
+        downChicken.classList.remove('none');
+      }
+      function handUp(side) {
+        let upHand = document.getElementsByClassName(`cat__hand-${side}--up`)[0];
+        let upChicken = document.getElementsByClassName(`chicken-${side}--up`)[0];
+        let downHand = document.getElementsByClassName(`cat__hand-${side}--down`)[0];
+        let downChicken = document.getElementsByClassName(`chicken-${side}--down`)[0];
+
+        //Remove downHand & downChicken by adding "none" class
+        downHand.className += ' none';
+        downChicken.className += ' none';
+
+        //Make appear upHand & upChicken by removing "none" class
+        upHand.classList.remove('none');
+        upChicken.classList.remove('none');
+      }
+    </script>
+  </body>
+</html>
