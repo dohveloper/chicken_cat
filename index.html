@@ -71,7 +71,6 @@
       
       //Key Event
       function keyDown() {
-        console.log(event.keyCode);
         switch (event.keyCode) {
           case 37:
             handDown('left');
@@ -84,10 +83,13 @@
             handDown('right');
             playSound('leftDown');
             playSound('rightDown');
+            isLeftFired = true;
+            isRightFired = true;
             break;
           case 39:
             handDown('right');
             playSound('rightDown');
+            isRightFired = true;
             break;
         }
       }
@@ -97,7 +99,7 @@
           case 37:
             handUp('left');
             playSound('leftUp');
-            isLeftFired = true;
+            isLeftFired = false;
             break;
           case 38:
           case 40:
@@ -105,30 +107,38 @@
             handUp('right');
             playSound('leftUp');
             playSound('rightUp');
+            isLeftFired = false;
+            isRightFired = false;
             break;
           case 39:
             handUp('right');
             playSound('rightUp');
+            isRightFired = false;
             break;
         }
       }
       
       //Sound
       function playSound(sound) {
+        //only play sound for once(with help of isLeftFired&&isRightFired)
         let audio;
-        if (sound == 'leftDown') {
+        if (sound == 'leftDown'&&isLeftFired===false) {
           audio = new Audio('./sound/sound1-1.mp3');
+          audio.play();
+        }
+        if (sound == 'rightDown'&&isRightFired===false) {
+          audio = new Audio('./sound/sound2-1.mp3');
+          audio.play();
         }
         if (sound == 'leftUp') {
           audio = new Audio('./sound/sound1-2.mp3');
-        }
-        if (sound == 'rightDown') {
-          audio = new Audio('./sound/sound2-1.mp3');
+          audio.play();
         }
         if (sound == 'rightUp') {
           audio = new Audio('./sound/sound2-2.mp3');
+          audio.play();
         }
-        audio.play();
+        
       }
       
       //Hand Motion
