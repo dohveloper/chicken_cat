@@ -3,6 +3,7 @@
   <head>
     <title>Chicken Cat</title>
     <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;800;900&display=swap" rel="stylesheet">
     <script>
       function myFunction() {
         document.getElementById('demo').innerHTML = 'Paragraph changed.';
@@ -29,7 +30,19 @@
       <img class="chicken-right--up" alt="chicken_right" src="./img/chicken_before.png" />
       <img class="chicken-right--down none" alt="chicken_right" src="./img/chicken_after.png" />
     </div>
-
+    <div class="keys">
+      <div class="keys__hitChicken">
+        <span class="key__text">Hit The Chicken</span>
+        <span class="key">←</span>
+        <span class="key"> &nbsp↑</span>
+        <span class="key"> &nbsp↓</span>
+        <span class="key">→</span>
+      </div>
+      <div class="keys__meow">
+        <span class="key__text">Meow</span>
+        <span class="key key__space">SPACE</span>
+      </div>
+    </div>
     <script>
       //flag for play sound only once per press
       let isLeftFired = false;
@@ -45,14 +58,23 @@
         //Check whether it is a left-click or a right-click.
         switch (event.which) {
           case 1:
-            handDown('left');
+              handDown('left');
+            playSound('leftDown');
+            isLeftFired = true;
+            break;
             break;
           case 2:
-            handDown('left');
+             handDown('left');
             handDown('right');
+            playSound('leftDown');
+            playSound('rightDown');
+            isLeftFired = true;
+            isRightFired = true;
             break;
           case 3:
             handDown('right');
+            playSound('rightDown');
+            isRightFired = true;
             break;
         }
       }
@@ -60,14 +82,18 @@
         //Check whether it is a left-click or a right-click.
         switch (event.which) {
           case 1:
-            handUp('left');
+             handUp('left');
+            playSound('leftUp');
+            isLeftFired = false;
             break;
           case 2:
-            handUp('left');
             handUp('right');
-            break;
+            playSound('rightUp');
+            isRightFired = false;
           case 3:
-            handUp('right');
+             handUp('right');
+            playSound('rightUp');
+            isRightFired = false;
             break;
         }
       }
@@ -106,7 +132,6 @@
         }
       }
       function keyUp() {
-        console.log(event.keyCode);
         switch (event.keyCode) {
           //Left Key
           case 37:
